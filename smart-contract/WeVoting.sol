@@ -5,6 +5,8 @@ struct Candidate {
     uint number;
     string photoUri;
     string name;
+    uint votes;
+    uint date;
 }
 
 struct Vote {
@@ -17,15 +19,21 @@ contract WeVoting {
     uint public currentVoting;
     uint public lastCandidateNumber;
     uint public currentMaxDate;
-    mapping(uint => Candidate[]) public votings;
+    mapping(uint => mapping(uint => Candidate)) public votingCandidates;
     mapping(uint => mapping(address => Vote)) public votes;
 
     constructor() {
         owner = msg.sender;
     }
 
-    function getCurrentCandidates() public view returns(Candidate[] memory) {
-        return votings[currentVoting];
+    function requireCandidateVoting(uint number) private view {
+        require(votingCandidates[currentVoting][number].date > 0, "No candidate with that number");
+        require(currentMaxDate > block.timestamp, "No open votings");
+    }
+
+    function getCandidateByNumber(uint number) public view returns(Candidate memory) {
+        requireCandidateVoting(number);
+        return votingCandidates[currentVoting][number];
     }
 
     function addVoting(uint timeToVote) public {
@@ -42,18 +50,19 @@ contract WeVoting {
         newCandidate.number = lastCandidateNumber++;
         newCandidate.name = name;
         newCandidate.photoUri = photoUri;
+        newCandidate.date = block.timestamp;
 
-        votings[currentVoting].push(newCandidate);
+        votingCandidates[currentVoting][newCandidate.number] = newCandidate;
     }
 
     function toVote(uint number) public {
-        require(number >= 1 && number <= votings[currentVoting].length, "No candidate with that number");
-        require(currentMaxDate > block.timestamp, "No open votings");
+        requireCandidateVoting(number);
         require(votes[currentVoting][msg.sender].date == 0, "You already voted");
         
         Vote memory vote;
         vote.number = number;
         vote.date = block.timestamp;
         votes[currentVoting][msg.sender] = vote;
+        ++votingCandidates[currentVoting][number].votes;
     }
 }
