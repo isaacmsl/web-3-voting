@@ -65,7 +65,7 @@ export default function Home() {
             )}
           <ReCAPTCHA
             size="invisible"
-            sitekey="6Lek4WMpAAAAAMfkLeI2BuuDzlfg5X7wlcwSa6Qf"
+            sitekey="6LfQ32MpAAAAALmsp4Qk3LYt_cS1P_TBzRhUhI10"
             ref={reCaptchaRef}
             onChange={handleReCaptcha}
           />
