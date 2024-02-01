@@ -36,13 +36,7 @@ export default function Home() {
             Connect with MetaMask
           </button>
         </section>
-        <Image
-          className="rounded"
-          src="/blockchain.jpg"
-          alt="Blockchain Tecnology"
-          width={400}
-          height={400}
-        />
+        <iframe width={400} height={300} src="https://www.youtube.com/embed/EKzZOZUAbfg" title="Bringing Voting Systems into the Digital Age with Blockchain | Annika Jacobsen | TEDxZurichSalon"  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
       </main>
       <footer className="flex flex-wrap-reverse justify-between p-12 gap-12 md:gap-40 text-gray-500">
         &copy; 2024 Web 3 Voting, Inc
