@@ -1,22 +1,28 @@
 "use client";
 
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useState } from "react";
 import { createRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import { loginWeb3 } from "@/services/Web3Service";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const reCaptchaRef = createRef<ReCAPTCHA>();
   const [captcha, setCaptcha] = useState("");
+
+  const { push } = useRouter();
 
   useEffect(() => {
     reCaptchaRef.current?.execute();
   }, []);
 
   function handleLogin() {
+    loginWeb3()
+      .then(() => push("/vote"))
+      .catch(err => console.error(err));
   }
 
   function handleReCaptcha(value: string | null) {
@@ -25,11 +31,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center sm:h-screen">
-      <Head>
-        <title>Web 3 Voting | Login</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Head>
       <main className="flex flex-col sm:flex-row gap-12 p-12 justify-center">
         <section className="flex flex-col items-start justify-center gap-12 md:gap-20">
           <header className="grid gap-4">
